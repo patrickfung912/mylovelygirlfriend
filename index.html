@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>女朋友15/5任務系統</title>
+    <style>
+        /* 基礎樣式 */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fff5f5;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #ff6b88;
+            margin-bottom: 30px;
+        }
+        
+        /* 任務列表樣式 */
+        .task {
+            text-align: left;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #fff9f9;
+            border-radius: 10px;
+            border-left: 4px solid #ff6b88;
+        }
+        .task h3 {
+            margin-top: 0;
+            color: #ff4d73;
+        }
+        .task-item {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        /* 按鈕樣式 */
+        button {
+            background-color: #ff6b88;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background-color: #ff4d73;
+            transform: scale(1.05);
+        }
+        .back-btn {
+            background-color: #ffb6c1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+        .back-btn:hover {
+            background-color: #ff9eb5;
+        }
+        
+        /* 頁面切換 */
+        #reward-page {
+            display: none;
+        }
+        
+        /* 圖片樣式 */
+        #reward-image {
+            max-width: 100%;
+            border-radius: 10px;
+            margin: 20px 0;
+            max-height: 300px;
+            object-fit: cover;
+        }
+        .reward-message {
+            font-size: 24px;
+            color: #ff6b88;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        /* 輸入框 */
+        .input-box {
+            margin: 20px 0;
+        }
+        .input-box input {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ffb6c1;
+            border-radius: 5px;
+            width: 200px;
+            text-align: center;
+        }
+        
+        /* 警告彈窗 */
+        .warning-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        .warning-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 400px;
+            text-align: center;
+            animation: shake 0.5s;
+        }
+        .warning-content h2 {
+            color: #ff4d73;
+            margin-top: 0;
+        }
+        .warning-btn {
+            background-color: #ff6b88;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        
+        /* 動畫效果 */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+        .loading {
+            display: none;
+            margin: 20px auto;
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #ff6b88;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* 使用指南 */
+        .guide {
+            background-color: #f8f8f8;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        .guide h3 {
+            color: #ff6b88;
+            margin-top: 0;
+        }
+        .guide ol {
+            padding-left: 20px;
+        }
+    </style>
+    <!-- 引入 EmailJS -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+        // 初始化 EmailJS
+        (function() {
+            emailjs.init('UoXYWLFi_420MovQ2');
+        })();
+    </script>
+</head>
+<body>
+    <!-- 任務頁面 -->
+    <div id="task-page" class="container">
+        <h1>⭐️ 女朋友15/5任務清單 ⭐️</h1>
+        
+        <div class="guide">
+            <h3>使用指南</h3>
+            <ol>
+                <li>閱讀下方所有任務內容</li>
+                <li>在輸入框輸入「接受」開始任務</li>
+                <li>完成任務後記得找男朋友領取獎勵！</li>
+                <li>不准輸入「不接受」</li>
+            </ol>
+        </div>
+        
+        <div class="task">
+            <h3>1. 努力返工</h3>
+        </div>
+        
+        <div class="task">
+            <h3>2. 乖乖地上堂</h3>
+            <div class="task-item">
+                <label>▸ 認真記筆記</label>
+            </div>
+        </div>
+        
+        <div class="task">
+            <h3>3. 安全返到屋企</h3>
+            <div class="task-item">
+                <label>🚇 返到屋企WhatsApp俾我聽</label>
+            </div>
+        </div>
+        
+        <div class="task">
+            <h3>4. 食飽飽</h3>
+            <div class="task-item">
+                <label>🍽️ lunch拍照認證</label>
+            </div>
+            <div class="task-item">
+                <label>🍽️ dinner拍照認證</label>
+            </div>
+            <div class="task-item">
+                <label>🥛 喝夠8杯水</label>
+            </div>
+            <div class="task-item">
+                <label>🥬 晚餐有蔬菜</label>
+            </div>
+        </div>
+        
+        <div class="task">
+            <h3>任務獎勵：</h3>
+            <p>Kiss x 10＋專屬摸摸頭服務＋任食雪糕券x1</p>
+        </div>
+        
+        <div class="input-box">
+            <input type="text" id="accept-input" placeholder="輸入【接受】開始今日任務">
+        </div>
+        <button id="accept-btn">提交</button>
+        <div id="loading" class="loading"></div>
+    </div>
+    
+    <!-- 獎勵頁面 -->
+    <div id="reward-page" class="container">
+        <div class="reward-message">任務已接受！完成後有獎勵哦！💖</div>
+        <img id="reward-image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQihKlf-dX_DM0w2hWEdqcGmQMj1rdrYtzeVg&s" alt="獎勵圖片">
+        <p>記得完成所有任務換取：</p>
+        <p>Kiss x 10＋專屬摸摸頭服務＋任食雪糕券x1 🥰</p>
+        <p><small>（完成後記得向男朋友出示證明～）</small></p>
+        <button class="back-btn" id="back-btn">返回任務頁面</button>
+    </div>
+
+    <!-- 警告彈窗 -->
+    <div id="warning-modal" class="warning-modal">
+        <div class="warning-content">
+            <h2>❌ 唔准拒絕任務！ ❌</h2>
+            <p>你一定要乖乖地接受任務先得㗎！</p>
+            <p>立即輸入「接受」！</p>
+            <button class="warning-btn" id="close-warning">知道啦</button>
+        </div>
+    </div>
+
+    <script>
+        // 拒絕關鍵詞列表
+        const rejectKeywords = ['不接受', '我唔要', '唔要', '唔接受', 'no', '拒絕', '唔想'];
+        
+        // 接受任務按鈕功能
+        document.getElementById('accept-btn').addEventListener('click', function() {
+            const userInput = document.getElementById('accept-input').value.trim();
+            
+            if (userInput === '接受') {
+                // 顯示加載動畫
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('accept-btn').disabled = true;
+                
+                // 先轉頁面確保用戶體驗
+                document.getElementById('task-page').style.display = 'none';
+                document.getElementById('reward-page').style.display = 'block';
+                
+                // 嘗試發送郵件（不影響主要流程）
+                emailjs.send('service_hp54elf', 'template_y9g3ffu', {
+                    to_name: '男朋友',
+                    from_name: '女朋友',
+                    message: '我已經接受15/5的所有任務啦！記得檢查哦～',
+                    to_email: 'patrickfung912@gmail.com'
+                })
+                .then(function() {
+                    console.log('郵件發送成功');
+                })
+                .catch(function(error) {
+                    console.error('郵件發送失敗:', error);
+                })
+                .finally(function() {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('accept-btn').disabled = false;
+                });
+            } 
+            else if (rejectKeywords.some(keyword => userInput.includes(keyword))) {
+                // 顯示警告彈窗
+                document.getElementById('warning-modal').style.display = 'flex';
+            }
+            else {
+                alert('請輸入「接受」來開始任務哦！');
+            }
+        });
+        
+        // 關閉警告彈窗
+        document.getElementById('close-warning').addEventListener('click', function() {
+            document.getElementById('warning-modal').style.display = 'none';
+        });
+        
+        // 返回按鈕功能
+        document.getElementById('back-btn').addEventListener('click', function() {
+            document.getElementById('reward-page').style.display = 'none';
+            document.getElementById('task-page').style.display = 'block';
+            document.getElementById('accept-input').value = '';
+        });
+    </script>
+</body>
+</html>
